@@ -5,7 +5,7 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 
-delta = {  # 練習３：移動量辞書
+delta = {
     pg.K_UP: (0, -5),
     pg.K_DOWN: (0, +5),
     pg.K_LEFT: (-5, 0),
@@ -14,11 +14,7 @@ delta = {  # 練習３：移動量辞書
 
 
 def check_bound(obj_rct: pg.Rect):
-    """
-    引数：こうかとんRectかばくだんRect
-    戻り値：タプル（横方向判定結果，縦方向判定結果）
-    画面内ならTrue，画面外ならFalse
-    """
+
     yoko, tate = True, True
     if obj_rct.left < 0 or WIDTH < obj_rct.right: # 横方向判定
         yoko = False
@@ -32,9 +28,8 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     ####こうかとん####
     kk_img = pg.image.load("ex02/fig/3.png")
-    kk_img = pg.transform.rotozoom(kk_img, 0, 10.0)
-    kk_rct = kk_img.get_rect()
-    kk_rct.center = (900, 400)  # 練習３：こうかとんの初期座標を設定する
+    
+
     
     #####爆弾####
     bomb = pg.Surface((10, 10))
@@ -43,6 +38,27 @@ def main():
     x,y = random.randint(0,WIDTH),random.randint(0,HEIGHT) #ランダムな座標を設定する。
     bomb_rct.center = (x,y)#練習問題１
     vx, vy = +5, +5 #練習２　爆弾の移動
+    
+    
+    """追加機能１"""
+    kk_img_r =  pg.transform.flip(kk_img, True, False)
+    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    
+    kouka_houkou ={
+        (0,0) : pg.transform.rotozoom(kk_img, 0, 1.0),
+        (-5,0) : pg.transform.rotozoom(kk_img, 0, 1.0),
+        (-5,-5) : pg.transform.rotozoom(kk_img, 315, 1.0),
+        (0,-5) : pg.transform.rotozoom(kk_img, 225, 1.0),
+        (+5,-5) : pg.transform.rotozoom(kk_img_r, 45, 2.0),
+        (+5,0) : pg.transform.flip(kk_img, True, False),
+        (+5,+5) : pg.transform.rotozoom(kk_img_r, 315, 2.0),
+        (0,+5) : pg.transform.rotozoom(kk_img, 90, 1.0),
+        (-5,+5) : pg.transform.rotozoom(kk_img, 45, 1.0)
+}
+    kk_img = kouka_houkou[(0,0)]
+    kk_rct = kk_img.get_rect()
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = (900, 400)  
     
     clock = pg.time.Clock()
     tmr = 0
@@ -68,6 +84,7 @@ def main():
         kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習３：移動させる
         if check_bound(kk_rct) != (True, True):  # 練習４：はみだし判定
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        kk_img = kouka_houkou[tuple(sum_mv)]
         screen.blit(kk_img, kk_rct)  # 練習３：移動後の座標に表示させる
         
         ####爆弾####
