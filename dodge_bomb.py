@@ -1,3 +1,4 @@
+import random
 import sys
 import pygame as pg
 
@@ -12,6 +13,13 @@ def main():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     clock = pg.time.Clock()
+    
+    bomb = pg.Surface((10, 10))
+    pg.draw.circle(bomb, (255, 0, 0), (10, 10), 10)
+    bomb_rtc = bomb.get_rect()
+    x,y = random.randint(0,WIDTH),random.randint(0,HEIGHT) #ランダムな座標を設定する。
+    bomb_rtc.center = (x,y)#演習
+     
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -20,6 +28,7 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
+        screen.blit(bomb, bomb_rtc)#表示と座標の設定
         pg.display.update()
         tmr += 1
         clock.tick(10)
