@@ -13,6 +13,9 @@ delta = {
     }
 
 
+"""これから何を書いてあるのかをよくコメントして分かりやすくする"""
+
+
 def check_bound(obj_rct: pg.Rect):
 
     yoko, tate = True, True
